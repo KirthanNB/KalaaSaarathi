@@ -1,57 +1,84 @@
-from fastapi import FastAPI, Form
-import shutil, os, uuid
-from gemini_helper import describe_image
-from twilio.rest import Client
-import os
-sid   = os.getenv("TWILIO_SID")      # Cloud Build injects
-token = os.getenv("TWILIO_TOKEN")
-twilio_client = Client(sid, token)
+# ~~~~~~~~~~~~~~  C:\CraftLink\bot\main.py  ~~~~~~~~~~~~~
+from fastapi import FastAPI, Form, Response
+import os, uuid, requests
+from twilio.twiml.messaging_response import MessagingResponse
+from google.cloud import vision
+import requests
+from requests.auth import HTTPBasicAuth
 
 app = FastAPI()
 
-# --- helper stubs (replace later with real implementations) ---
-def remove_bg_and_upload(local_file: str):
-    """Fake background removal + upload, return list of image URLs."""
-    # TODO: replace with actual background-removal + cloud upload
-    return [f"https://example.com/{os.path.basename(local_file)}_clean.png"]
+# Set Google credentials (make sure the JSON exists at this path)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:\\CraftLink\\bot\\craftlink-vision.json"
 
-def deploy_shop(product_id: str):
-    """Fake mini-shop deployment, return shop URL."""
-    # TODO: replace with actual shop deployment logic
-    return f"https://craftshop.example.com/{product_id}"
+# Initialize Vision client
+vision_client = vision.ImageAnnotatorClient()
 
-# --- routes ---
-@app.get("/")
-def hello():
-    return {"message": "CraftLink Day-3 brain alive"}
+def describe_image_twilio(media_url: str) -> str:
+    try:
+        sid = os.getenv("TWILIO_SID")
+        token = os.getenv("TWILIO_TOKEN")
+
+        # Download the image from Twilio
+        response = requests.get(media_url, auth=HTTPBasicAuth(sid, token))
+        if response.status_code != 200:
+            return f"⚠️ Failed to fetch media: {response.status_code}"
+
+        image = vision.Image(content=response.content)
+        vision_resp = vision_client.label_detection(image=image)
+
+        if vision_resp.error.message:
+            return f"⚠️ Vision API error: {vision_resp.error.message}"
+
+        labels = vision_resp.label_annotations
+        if not labels:
+            return "✨ No labels detected. Price band: ₹250-400  #handmade"
+
+        description = ', '.join([label.description for label in labels])
+        return f"✨ {description}. Price band: ₹250-400 #handmade"
+
+    except Exception as e:
+        return f"⚠️ An error occurred: {e}"
+
+def deploy_shop(product_id: str) -> str:
+    """
+    Generate a product page URL hosted on Firebase.
+    Replace the base URL with your actual Firebase Hosting domain.
+    """
+    return f"https://neethi-saarathi-ids.web.app/product/{product_id}"
 
 @app.post("/whatsapp")
-def whatsapp_photo(
-    From: str = Form(...),
-    NumMedia: str = Form(...),
+async def whatsapp_reply(
+    Body: str = Form(""),
+    NumMedia: str = Form("0"),
     MediaUrl0: str = Form(None)
 ):
-    # 1. Check if user sent a photo
-    if NumMedia == "0":
-        return {"reply": "कृपया अपने शिल्प की फोटो भेजें."}
+    resp = MessagingResponse()
 
-    # 2. Save the photo (currently fake with demo_pot.jpg)
-    photo_id = str(uuid.uuid4())[:8]
-    local_file = f"inbox/{photo_id}.jpg"
-    os.makedirs("inbox", exist_ok=True)
-    shutil.copy("demo_pot.jpg", local_file)   # replace later with real download
+    try:
+        if NumMedia != "0" and MediaUrl0:
+            # Step 1: analyze the image
+            analysis = describe_image_twilio(MediaUrl0)
+            resp.message(analysis)
 
-    # 3. Ask Gemini to describe image
-    story = describe_image(local_file)
+            # Step 2: generate a shop URL for this product
+            product_id = str(uuid.uuid4())
+            shop_url = deploy_shop(product_id)
+            resp.message(f"🛒 View this item in our shop: {shop_url}")
 
-    # 4. Generate clean product images
-    image_urls = remove_bg_and_upload(local_file)
+        else:
+            if Body.strip().lower() == "hi":
+                resp.message("👋 Hey! Send me a photo and I'll describe it for you using AI.")
+            else:
+                resp.message(f"You said: {Body}")
 
-    # 5. Deploy mini-shop
-    shop_url = deploy_shop(photo_id)
+    except Exception as e:
+        resp = MessagingResponse()
+        resp.message(f"⚠️ Error while processing: {e}")
 
-    # 6. Reply back to artisan
-    return {
-        "reply": f"{story}\n\nYour shop: {shop_url}",
-        "images": image_urls
-    }
+    return Response(content=str(resp), media_type="application/xml")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
