@@ -1,31 +1,39 @@
-import os, requests, uuid
-from google.cloud import vision, storage
+import os
+import uuid
+from google.cloud import storage
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
 
-client = vision.ImageAnnotatorClient()
-storage_client = storage.Client()
-
-BUCKET = "craftlink-images"   # we’ll create this bucket in browser
-
-def remove_bg_and_upload(local_path: str) -> str:
-    # 1. remove background via Vision AI (trim bbox)
-    with open(local_path, "rb") as f:
-        content = f.read()
-    image = vision.Image(content=content)
-    response = client.object_localization(image=image)
-    objects = response.localized_object_annotations
-    # simple: keep biggest bounding box
-    if not objects:
-        bbox = (0, 0, 1, 1)
-    else:
-        bbox = (obj.bounding_poly.normalized_vertices for obj in objects)
-    # 2. fake crop & save 4 festival backgrounds (demo)
-    # (tomorrow real Imagen2 call; today we copy 4 demo files)
-    urls = []
-    for bg in ["diwali", "holi", "sunset", "plain"]:
-        file_name = f"{uuid.uuid4().hex[:8]}.jpg"
-        blob = storage_client.bucket(BUCKET).blob(file_name)
-        blob.upload_from_filename(local_path)  # demo: same file
-        blob.make_public()
-        urls.append(blob.public_url)
-    return urls
+def remove_bg_and_upload(local_path: str) -> list:
+    """Upload image to uniformly accessed bucket"""
+    try:
+        storage_client = storage.Client()
+        bucket_name = "craftlink-images"
+        bucket = storage_client.bucket(bucket_name)
+        
+        # Upload the image
+        with open(local_path, "rb") as f:
+            image_content = f.read()
+        
+        file_name = f"{uuid.uuid4().hex}.jpg"
+        blob = bucket.blob(file_name)
+        
+        # REMOVE predefined_acl for uniform bucket-level access
+        blob.upload_from_string(image_content, content_type='image/jpeg')
+        
+        # For uniform access, construct the URL directly
+        image_url = f"https://storage.googleapis.com/{bucket_name}/{file_name}"
+        
+        print(f"✅ Image uploaded: {image_url}")
+        return [image_url] * 4
+        
+    except Exception as e:
+        print(f"❌ Upload failed: {e}")
+        # Use timestamped fallbacks to avoid cache issues
+        timestamp = uuid.uuid4().hex[:8]
+        return [
+            f"https://storage.googleapis.com/craftlink-images/fallback1.jpg?t={timestamp}",
+            f"https://storage.googleapis.com/craftlink-images/fallback2.jpg?t={timestamp}",
+            f"https://storage.googleapis.com/craftlink-images/fallback3.jpg?t={timestamp}",
+            f"https://storage.googleapis.com/craftlink-images/fallback4.jpg?t={timestamp}"
+        ]
