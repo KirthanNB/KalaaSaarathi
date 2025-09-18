@@ -20,7 +20,7 @@ def build_and_host(product_id: str, description: str, image_urls: list) -> str:
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>{product_data['title']} - KalaaSaarathi</title>
+            <title>Handmade Craft #{product_id[:6]} - KalaaSaarathi</title>
             <script src="https://cdn.tailwindcss.com"></script>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
             <style>
@@ -68,7 +68,7 @@ def build_and_host(product_id: str, description: str, image_urls: list) -> str:
 
                         <!-- Details -->
                         <div class="p-8 bg-amber-50">
-                            <h1 class="text-3xl font-bold text-amber-800 mb-4">{product_data['title']}</h1>
+                            <h1 class="text-3xl font-bold text-amber-800 mb-4">Handmade Craft #{product_id[:6]}</h1>
                             
                             <div class="bg-white p-6 rounded-lg mb-6">
                                 <p class="text-gray-700 text-lg leading-relaxed">{description.replace('*', '')}</p>
