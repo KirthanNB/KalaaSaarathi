@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KalaaSaarathi - Handmade Crafts Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffecc7 100%);
+        }
+        
+        .hindi-font {
+            font-family: 'Hind', 'Noto Sans Devanagari', sans-serif;
+        }
+        
+        .artisan-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50L100 0H0L50 50Z' fill='%23d97706' fill-opacity='0.05'/%3E%3C/svg%3E");
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reel-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .reel-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .seller-card {
+            transition: all 0.3s ease;
+        }
+        
+        .seller-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen artisan-pattern">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-hands text-white"></i>
+                </div>
+                <span class="text-2xl font-bold text-amber-800">KalaaSaarathi</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#products" class="text-amber-600 hover:text-amber-700">Products</a>
+                <a href="#sellers" class="text-amber-600 hover:text-amber-700">Artisans</a>
+                <a href="#reels" class="text-amber-600 hover:text-amber-700">Reels</a>
+                <a href="https://wa.me/14155238886" class="bg-green-600 text-white px-4 py-2 rounded-lg">
+                    <i class="fab fa-whatsapp mr-2"></i> WhatsApp Us
+                </a>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-12 text-center">
+            <h1 class="text-4xl font-bold text-amber-800 mb-4">Handmade Crafts Marketplace</h1>
+            <p class="text-gray-600 text-lg mb-6">Discover unique handmade creations from talented artisans across India</p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-md mx-auto mb-6">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Search products..." class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <button onclick="searchProducts()" class="absolute right-2 top-2 text-amber-600">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Category Filters -->
+            <div class="flex flex-wrap justify-center gap-2 mb-6">
+
+                <button onclick="filterByCategory('all')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-500 text-white" 
+                        data-category="all">
+                    All
+                </button>
+
+                <button onclick="filterByCategory('pottery')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="pottery">
+                    Pottery
+                </button>
+
+                <button onclick="filterByCategory('textiles')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="textiles">
+                    Textiles
+                </button>
+
+                <button onclick="filterByCategory('jewelry')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="jewelry">
+                    Jewelry
+                </button>
+
+                <button onclick="filterByCategory('paintings')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="paintings">
+                    Paintings
+                </button>
+
+                <button onclick="filterByCategory('wooden')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="wooden">
+                    Wooden
+                </button>
+
+                <button onclick="filterByCategory('metalwork')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="metalwork">
+                    Metalwork
+                </button>
+
+                <button onclick="filterByCategory('leather')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="leather">
+                    Leather
+                </button>
+
+                <button onclick="filterByCategory('papercraft')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="papercraft">
+                    Papercraft
+                </button>
+
+                <button onclick="filterByCategory('home-decor')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="home-decor">
+                    Home-Decor
+                </button>
+
+                <button onclick="filterByCategory('accessories')" 
+                        class="category-btn px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-700" 
+                        data-category="accessories">
+                    Accessories
+                </button>
+
+            </div>
+            
+            <div class="flex justify-center space-x-4">
+                <a href="#products" class="bg-amber-500 text-white px-6 py-3 rounded-lg font-semibold">Browse Products</a>
+                <a href="https://wa.me/14155238886" class="border border-amber-500 text-amber-500 px-6 py-3 rounded-lg font-semibold">Become a Seller</a>
+            </div>
+        </div>
+
+        <!-- Reels Section -->
+        <h2 id="reels" class="text-3xl font-bold text-amber-800 mb-8 text-center">Featured Reels</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="reelsContainer">
+
+            <div class="reel-card bg-white rounded-xl shadow-md overflow-hidden">
+                <video src="https://storage.googleapis.com/craftlink-videos/fallback.mp4?t=2b428d0d" class="w-full h-48 object-cover" controls></video>
+                <div class="p-4">
+                    <p class="text-gray-700 mb-2">A beautiful Sunset!!🌄</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>By Local Artisan</span>
+                        <div class="flex items-center space-x-3">
+                            <span><i class="fas fa-heart text-red-500"></i> 21</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> 10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reel-card bg-white rounded-xl shadow-md overflow-hidden">
+                <video src="https://storage.googleapis.com/craftlink-videos/fallback.mp4" class="w-full h-48 object-cover" controls></video>
+                <div class="p-4">
+                    <p class="text-gray-700 mb-2">A beautiful Sunset!!🌄</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>By Local Artisan</span>
+                        <div class="flex items-center space-x-3">
+                            <span><i class="fas fa-heart text-red-500"></i> 8</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> 3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reel-card bg-white rounded-xl shadow-md overflow-hidden">
+                <video src="https://storage.googleapis.com/craftlink-videos/fallback.mp4" class="w-full h-48 object-cover" controls></video>
+                <div class="p-4">
+                    <p class="text-gray-700 mb-2">A beautiful Sunset!!🌄</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>By Local Artisan</span>
+                        <div class="flex items-center space-x-3">
+                            <span><i class="fas fa-heart text-red-500"></i> 47</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> 20</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reel-card bg-white rounded-xl shadow-md overflow-hidden">
+                <video src="https://storage.googleapis.com/craftlink-videos/fallback.mp4" class="w-full h-48 object-cover" controls></video>
+                <div class="p-4">
+                    <p class="text-gray-700 mb-2">A beautiful Sunset!!🌄</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>By Local Artisan</span>
+                        <div class="flex items-center space-x-3">
+                            <span><i class="fas fa-heart text-red-500"></i> 53</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> 9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reel-card bg-white rounded-xl shadow-md overflow-hidden">
+                <video src="https://storage.googleapis.com/craftlink-videos/8339e0788b58454db7f5d6dcd7de13c4.mp4" class="w-full h-48 object-cover" controls></video>
+                <div class="p-4">
+                    <p class="text-gray-700 mb-2">A beautiful Sunset!!🌄</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>By Local Artisan</span>
+                        <div class="flex items-center space-x-3">
+                            <span><i class="fas fa-heart text-red-500"></i> 10</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reel-card bg-white rounded-xl shadow-md overflow-hidden">
+                <video src="https://storage.googleapis.com/craftlink-videos/3147e01d955b4fdc8bd1b4c4a9a18dff.mp4" class="w-full h-48 object-cover" controls></video>
+                <div class="p-4">
+                    <p class="text-gray-700 mb-2">Cloud Flow!!☁️☁️</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>By Local Artisan</span>
+                        <div class="flex items-center space-x-3">
+                            <span><i class="fas fa-heart text-red-500"></i> 92</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> 14</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Products Grid -->
+        <h2 id="products" class="text-3xl font-bold text-amber-800 mb-8 text-center">Featured Products</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12" id="productsContainer">
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/2fa95bd2dc4840dea9eea360801dc362.jpg" alt="Handmade Craft #261bf4" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Handmade Craft #261bf4</h3>
+                    <p class="text-gray-600 text-sm mb-3">Ah, the *tant loom*!  My heart swells seeing this. The rhythmic clack, the deft ...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹500</span>
+                        <a href="/product/261bf401-3a7e-4c2d-8e2f-c2aa97c71944.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/c824ad016b3d4df7b009859da2fabb68.jpg" alt="Handmade Craft #6fa4f1" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Handmade Craft #6fa4f1</h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh, the potter's wheel!  My heart swells seeing this.  The earth, transformed by...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹350</span>
+                        <a href="/product/6fa4f194-9861-4369-af47-93e5aa965469.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/cf69ab71e6d04ecb8c657d43e05a543d.jpg" alt="Oh, my dear one, look at this beautiful carving!  " class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Oh, my dear one, look at this beautiful carving!  </h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh, my dear one, look at this beautiful carving!  The artist's hands, so skilled...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹255</span>
+                        <a href="/product/bce18f5c-4fb9-4999-a864-cc564d3bd478.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/4ae7af37bcf44cd19a49f72f3c16cfc0.jpg" alt="Oh my dear, look at this!  Such delicate lines, li" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Oh my dear, look at this!  Such delicate lines, li</h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh my dear, look at this!  Such delicate lines, like a spider's silken web, capt...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹1000</span>
+                        <a href="/product/f598bbfa-b99c-483a-a7dc-570aa82da421.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/8fbf4afdfb4246749eaec3227e3c55b1.jpg" alt="Oh, my dear! These vibrant colors, the intricate d" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Oh, my dear! These vibrant colors, the intricate d</h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh, my dear! These vibrant colors, the intricate details!  That peacock, crafted...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹2750</span>
+                        <a href="/product/c75d50cc-786f-4f34-9e25-85a8fcddc815.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/bc1c947721694c2ea8cd5b233e42afd7.jpg" alt="Oh my dears, these candles!  Such delicate floral " class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Oh my dears, these candles!  Such delicate floral </h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh my dears, these candles!  Such delicate floral prints, reminiscent of my own ...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹1000</span>
+                        <a href="/product/2235ecdc-d0cc-4650-b2c2-e41bae83101c.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="jewelry">
+                <img src="https://storage.googleapis.com/craftlink-images/827f3ca89f004452a3046f68c3fbc26e.jpg" alt="Oh, my dearie, look at this exquisite necklace set" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Oh, my dearie, look at this exquisite necklace set</h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh, my dearie, look at this exquisite necklace set!  The delicate rose gold, spa...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹1000</span>
+                        <a href="/product/b37cde6a-7441-45c1-87e7-4fe47c4954b1.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="handmade">
+                <img src="https://storage.googleapis.com/craftlink-images/87aaf1871960443690656c0dc95bc9fd.jpg" alt="Oh, this picture!  It reminds me of the sunsets ov" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Oh, this picture!  It reminds me of the sunsets ov</h3>
+                    <p class="text-gray-600 text-sm mb-3">Oh, this picture!  It reminds me of the sunsets over my childhood village. The d...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹1000</span>
+                        <a href="/product/37c55707-807b-4b68-a3b6-ec4fd07dc3e7.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="pottery">
+                <img src="https://storage.googleapis.com/craftlink-images/589261a149c24181b87886ce383e4be7.jpg" alt="Ah, the potter's wheel!  My heart swells seeing th" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">Ah, the potter's wheel!  My heart swells seeing th</h3>
+                    <p class="text-gray-600 text-sm mb-3">Ah, the potter's wheel!  My heart swells seeing this.  The earth, so humble, tra...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 font-bold">₹2750</span>
+                        <a href="/product/622c7333-e7ad-4c9c-910d-f8c10df842b9.html" class="text-amber-500 hover:text-amber-600">View →</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- No results message -->
+        <div id="noResults" class="text-center py-8 hidden">
+            <p class="text-gray-500 text-lg mb-4">No products found matching your search.</p>
+            <button onclick="filterByCategory('all'); document.getElementById('searchInput').value = ''; searchProducts();" 
+                    class="px-4 py-2 bg-amber-500 text-white rounded-lg font-semibold">
+                Show All Products
+            </button>
+        </div>
+
+        <!-- Sellers Section -->
+        <h2 id="sellers" class="text-3xl font-bold text-amber-800 mb-8 text-center">Featured Artisans</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+            <div class="seller-card bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="https://storage.googleapis.com/craftlink-images/4ae7af37bcf44cd19a49f72f3c16cfc0.jpg" alt="Local Artisan" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-1">Local Artisan</h3>
+                    <p class="text-gray-600 text-sm mb-2">India</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 text-sm">4 products</span>
+                        <a href="/seller/+917975987833.html" class="text-amber-500 hover:text-amber-600 text-sm">View Profile →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seller-card bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="https://storage.googleapis.com/craftlink-images/87aaf1871960443690656c0dc95bc9fd.jpg" alt="Local Artisan" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-1">Local Artisan</h3>
+                    <p class="text-gray-600 text-sm mb-2">India</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-600 text-sm">2 products</span>
+                        <a href="/seller/+919900662343.html" class="text-amber-500 hover:text-amber-600 text-sm">View Profile →</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-gray-600 mt-12">
+            <p>© 2023 KalaaSaarathi. All rights reserved.</p>
+            <p class="text-sm mt-2">Supporting Indian artisans one craft at a time</p>
+        </div>
+    </div>
+
+    <script>
+        let currentCategory = 'all';
+        
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            let visibleCount = 0;
+            
+            products.forEach(product => {
+                const title = product.querySelector('h3').textContent.toLowerCase();
+                const description = product.querySelector('p').textContent.toLowerCase();
+                const category = product.getAttribute('data-category');
+                
+                if ((title.includes(searchTerm) || description.includes(searchTerm)) && 
+                    (currentCategory === 'all' || category === currentCategory)) {
+                    product.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+            
+            // Show message if no products found
+            const noResults = document.getElementById('noResults');
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+        
+        function filterByCategory(category) {
+            currentCategory = category;
+            searchProducts(); // This will apply both category filter and search term
+            
+            // Update active category button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('bg-amber-500', 'text-white');
+                    btn.classList.remove('bg-amber-100', 'text-amber-700');
+                } else {
+                    btn.classList.remove('bg-amber-500', 'text-white');
+                    btn.classList.add('bg-amber-100', 'text-amber-700');
+                }
+            });
+        }
+        
+        // Make search work on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+        
+        // Initialize with all products shown
+        filterByCategory('all');
+    </script>
+</body>
+</html>
