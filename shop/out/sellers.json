@@ -1,0 +1,35 @@
+{
+  "sellers": [
+    {
+      "name": "Kirthan"
+    },
+    {
+      "region": "Karnataka"
+    },
+    {
+      "bio": "DM for personalised crafted arts for best remembered gift!!"
+    },
+    {
+      "skills": [
+        "String Art",
+        "Painting",
+        "Pencil Sketch",
+        "Personalised Candles"
+      ]
+    },
+    {
+      "name": "Rohith M profile set region swarga profile set bio jio india profile set skills computer"
+    },
+    {
+      "region": "swarga"
+    },
+    {
+      "bio": "jio india"
+    },
+    {
+      "skills": [
+        "computer"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product - KalaaSaarathi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffecc7 100%);
+        }
+        
+        .hindi-font {
+            font-family: 'Hind', 'Noto Sans Devanagari', sans-serif;
+        }
+        
+        .artisan-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50L100 0H0L50 50Z' fill='%23d97706' fill-opacity='0.1'/%3E%3C/svg%3E");
+        }
+        
+        .price-suggestion {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .price-suggestion.active {
+            border-color: #d97706;
+            background-color: #fffbeb;
+        }
+        
+        .image-preview {
+            transition: all 0.3s ease;
+        }
+        
+        .image-preview:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen artisan-pattern">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="/" class="text-artisan-600 hover:text-artisan-700 font-semibold flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Marketplace
+            </a>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-artisan-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-hands text-white text-sm"></i>
+                </div>
+                <span class="text-artisan-800 font-semibold">KalaaSaarathi</span>
+            </div>
+        </div>
+
+        <!-- Create Product Form -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h1 class="text-3xl font-bold text-artisan-800 mb-2">Create Your Product</h1>
+            <p class="text-artisan-600 mb-8">Showcase your handmade craft to the world</p>
+
+            <form id="createProductForm" class="space-y-6">
+                <!-- Product Images -->
+                <div>
+                    <label class="block text-sm font-semibold text-artisan-800 mb-3">Product Images</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4" id="imagePreviews">
+                        <!-- Image previews will appear here -->
+                    </div>
+                    <input type="file" id="productImages" accept="image/*" multiple 
+                           class="w-full px-3 py-2 border border-artisan-300 rounded-lg" />
+                    <p class="text-sm text-artisan-600 mt-2">Upload 2-4 clear images of your product</p>
+                </div>
+
+                <!-- Product Details -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-artisan-800 mb-2">Product Title</label>
+                        <input type="text" id="productTitle" required 
+                               class="w-full px-3 py-2 border border-artisan-300 rounded-lg focus:ring-2 focus:ring-artisan-500 focus:border-transparent"
+                               placeholder="e.g., Handmade Terracotta Pot" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-artisan-800 mb-2">Category</label>
+                        <select id="productCategory" required 
+                                class="w-full px-3 py-2 border border-artisan-300 rounded-lg focus:ring-2 focus:ring-artisan-500 focus:border-transparent">
+                            <option value="">Select Category</option>
+                            <option value="pottery">Pottery & Clay</option>
+                            <option value="textiles">Textiles & Fabrics</option>
+                            <option value="jewelry">Jewelry & Accessories</option>
+                            <option value="paintings">Paintings & Art</option>
+                            <option value="wooden">Wooden Crafts</option>
+                            <option value="metal">Metal Work</option>
+                            <option value="personalized">Personalized Items</option>
+                            <option value="home-decor">Home Decor</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-semibold text-artisan-800 mb-2">Product Description</label>
+                    <textarea id="productDescription" rows="4" required
+                              class="w-full px-3 py-2 border border-artisan-300 rounded-lg focus:ring-2 focus:ring-artisan-500 focus:border-transparent"
+                              placeholder="Describe your product in detail..."></textarea>
+                </div>
+
+                <!-- Material & Specifications -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-artisan-800 mb-2">Material</label>
+                        <input type="text" id="productMaterial"
+                               class="w-full px-3 py-2 border border-artisan-300 rounded-lg"
+                               placeholder="e.g., Natural Clay, Cotton, Wood" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-artisan-800 mb-2">Dimensions (optional)</label>
+                        <input type="text" id="productDimensions"
+                               class="w-full px-3 py-2 border border-artisan-300 rounded-lg"
+                               placeholder="e.g., 8x6 inches, 15x20 cm" />
+                    </div>
+                </div>
+
+                <!-- Pricing Section -->
+                <div>
+                    <label class="block text-sm font-semibold text-artisan-800 mb-4">Pricing</label>
+                    
+                    <!-- AI Price Suggestions -->
+                    <div class="bg-artisan-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold text-artisan-700 mb-3">AI Price Suggestions</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="priceSuggestions">
+                            <div class="price-suggestion p-3 rounded-lg text-center cursor-pointer" data-price="299">
+                                <div class="text-artisan-600 font-semibold">₹299</div>
+                                <div class="text-xs text-artisan-500">Budget Friendly</div>
+                            </div>
+                            <div class="price-suggestion p-3 rounded-lg text-center cursor-pointer" data-price="499">
+                                <div class="text-artisan-600 font-semibold">₹499</div>
+                                <div class="text-xs text-artisan-500">Standard</div>
+                            </div>
+                            <div class="price-suggestion p-3 rounded-lg text-center cursor-pointer" data-price="799">
+                                <div class="text-artisan-600 font-semibold">₹799</div>
+                                <div class="text-xs text-artisan-500">Premium</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-artisan-800 mb-2">Your Price (₹)</label>
+                            <input type="number" id="productPrice" required min="100" max="10000"
+                                   class="w-full px-3 py-2 border border-artisan-300 rounded-lg focus:ring-2 focus:ring-artisan-500 focus:border-transparent"
+                                   placeholder="Enter price" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-artisan-800 mb-2">Original Price (₹)</label>
+                            <input type="number" id="productOriginalPrice"
+                                   class="w-full px-3 py-2 border border-artisan-300 rounded-lg"
+                                   placeholder="Optional: for discounts" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Artisan Information -->
+                <div class="bg-artisan-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-artisan-800 mb-4">Your Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-artisan-800 mb-2">Your Name</label>
+                            <input type="text" id="artisanName" required
+                                   class="w-full px-3 py-2 border border-artisan-300 rounded-lg"
+                                   placeholder="Enter your name" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-artisan-800 mb-2">Region/State</label>
+                            <select id="artisanRegion" required
+                                    class="w-full px-3 py-2 border border-artisan-300 rounded-lg">
+                                <option value="">Select Region</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-semibold text-artisan-800 mb-2">WhatsApp Number</label>
+                        <input type="tel" id="artisanWhatsApp" required
+                               class="w-full px-3 py-2 border border-artisan-300 rounded-lg"
+                               placeholder="+91 XXXXX XXXXX" />
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" 
+                            class="bg-artisan-600 hover:bg-artisan-700 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+                        <i class="fas fa-plus-circle mr-2"></i>Create Product
+                    </button>
+                </div>
+            </form>
+
+            <div id="formMessage" class="mt-6 hidden"></div>
+        </div>
+
+        <!-- Quick Guide -->
+        <div class="bg-white rounded-xl p-6 mt-8">
+            <h3 class="text-xl font-semibold text-artisan-800 mb-4">Quick Selling Guide</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-artisan-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-camera text-artisan-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-artisan-700 mb-2">Great Photos</h4>
+                    <p class="text-sm text-gray-600">Use natural light and multiple angles</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-artisan-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-tag text-artisan-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-artisan-700 mb-2">Fair Pricing</h4>
+                    <p class="text-sm text-gray-600">Consider material cost and time invested</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-artisan-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-star text-artisan-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-artisan-700 mb-2">Honest Description</h4>
+                    <p class="text-sm text-gray-600">Be transparent about materials and process</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image Preview Handling
+        document.getElementById('productImages').addEventListener('change', function(e) {
+            const previewsContainer = document.getElementById('imagePreviews');
+            previewsContainer.innerHTML = '';
+            
+            Array.from(e.target.files).forEach((file, index) => {
+                if (index >= 4) return; // Limit to 4 images
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'image-preview relative';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg" />
+                        <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                                onclick="this.parentElement.remove()">×</button>
+                    `;
+                    previewsContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Price Suggestions
+        document.querySelectorAll('.price-suggestion').forEach(suggestion => {
+            suggestion.addEventListener('click', function() {
+                document.querySelectorAll('.price-suggestion').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('productPrice').value = this.dataset.price;
+            });
+        });
+
+        // Auto-categorization based on title
+        document.getElementById('productTitle').addEventListener('blur', function() {
+            const title = this.value.toLowerCase();
+            const categorySelect = document.getElementById('productCategory');
+            
+            if (!categorySelect.value) {
+                if (title.includes('pot') || title.includes('clay') || title.includes('terracotta')) {
+                    categorySelect.value = 'pottery';
+                } else if (title.includes('cloth') || title.includes('fabric') || title.includes('textile')) {
+                    categorySelect.value = 'textiles';
+                } else if (title.includes('jewel') || title.includes('necklace') || title.includes('bracelet')) {
+                    categorySelect.value = 'jewelry';
+                } else if (title.includes('paint') || title.includes('art') || title.includes('canvas')) {
+                    categorySelect.value = 'paintings';
+                } else if (title.includes('wood') || title.includes('carving')) {
+                    categorySelect.value = 'wooden';
+                }
+            }
+        });
+
+        // Auto-price suggestion based on category
+        document.getElementById('productCategory').addEventListener('change', function() {
+            const priceInput = document.getElementById('productPrice');
+            if (!priceInput.value) {
+                const priceMap = {
+                    'pottery': 499,
+                    'textiles': 799,
+                    'jewelry': 899,
+                    'paintings': 1299,
+                    'wooden': 699,
+                    'metal': 899,
+                    'personalized': 999,
+                    'home-decor': 599,
+                    'clothing': 899,
+                    'other': 499
+                };
+                priceInput.value = priceMap[this.value] || 499;
+            }
+        });
+
+        // Form Submission
+        document.getElementById('createProductForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const imageFiles = document.getElementById('productImages').files;
+            
+            // Add images
+            Array.from(imageFiles).forEach(file => {
+                formData.append('images', file);
+            });
+            
+            // Add other form data
+            formData.append('title', document.getElementById('productTitle').value);
+            formData.append('description', document.getElementById('productDescription').value);
+            formData.append('category', document.getElementById('productCategory').value);
+            formData.append('price', document.getElementById('productPrice').value);
+            formData.append('original_price', document.getElementById('productOriginalPrice').value || '');
+            formData.append('material', document.getElementById('productMaterial').value);
+            formData.append('dimensions', document.getElementById('productDimensions').value);
+            formData.append('artisan_name', document.getElementById('artisanName').value);
+            formData.append('artisan_region', document.getElementById('artisanRegion').value);
+            formData.append('whatsapp_number', document.getElementById('artisanWhatsApp').value);
+            
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.className = 'mt-6 p-4 rounded-lg hidden';
+            
+            try {
+                const response = await fetch('/api/create-product', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    messageDiv.className = 'mt-6 p-4 bg-green-100 text-green-700 rounded-lg';
+                    messageDiv.innerHTML = `
+                        ✅ ${result.message}<br>
+                        <a href="${result.product_url}" target="_blank" class="text-green-600 underline">View Your Product</a>
+                    `;
+                    document.getElementById('createProductForm').reset();
+                    document.getElementById('imagePreviews').innerHTML = '';
+                } else {
+                    messageDiv.className = 'mt-6 p-4 bg-red-100 text-red-700 rounded-lg';
+                    messageDiv.textContent = `❌ ${result.message}`;
+                }
+            } catch (error) {
+                messageDiv.className = 'mt-6 p-4 bg-red-100 text-red-700 rounded-lg';
+                messageDiv.textContent = '❌ Error creating product. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>
